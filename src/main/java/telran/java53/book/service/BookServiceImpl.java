@@ -105,11 +105,11 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public AuthorDto removeAuthor(String authorName) {
 	    Author author = authorRepository.findById(authorName).orElseThrow(EntityNotFoundException::new);
-	    List<Book> booksDelete = bookRepository.findByAuthorsNameIgnoreCase(authorName)
-	    		.peek(b -> b.getAuthors().remove(author))
-	    		.collect(Collectors.toList());
-
-	    bookRepository.deleteAll(booksDelete);
+//	    List<Book> booksDelete = (bookRepository.findByAuthorsNameIgnoreCase(authorName))
+////	    		.peek(b -> b.getAuthors().remove(author))
+//	    		.collect(Collectors.toList());
+	    bookRepository.findByAuthorsNameIgnoreCase(authorName).forEach(book -> bookRepository.delete(book));
+//	    bookRepository.deleteAll(booksDelete);
 	    authorRepository.delete(author);
 	    
 		return modelMapper.map(author, AuthorDto.class);
